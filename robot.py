@@ -37,9 +37,8 @@ class ROBOT:
         for sensor in self.sensors.values():
             sensor.Get_Value(i)
 
-    def Think(self,i):
+    def Think(self):
         self.nn.Update()
-        self.nn.Print()
 
     def Act(self,i):
         for neuronName in self.nn.Get_Neuron_Names():
