@@ -1,6 +1,12 @@
 import os
+from hillclimber import HILLCLIMBER
 
-for i in range(5):
-    os.system("py generate.py")
-    os.system("py simulate.py")
+hc = HILLCLIMBER()
+
+
+    #os.system("py generate.py")
+hc.Evolve()
+hc.Show_Best()
+    #os.system("py simulate.py")
+
 

@@ -10,8 +10,8 @@ import time
 import constants as c
 
 class SIMULATION:
-    def __init__(self):
-        self.physicsClient = p.connect(p.GUI)
+    def __init__(self, directOrGUI):
+        self.physicsClient = p.connect(p.GUI) if directOrGUI == "GUI" else p.connect(p.DIRECT)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(*c.gravity)
 
@@ -29,4 +29,6 @@ class SIMULATION:
             self.robot.Act(i)
             time.sleep(c.timesleep)
 
+    def Get_Fitness(self):
+        self.robot.Get_Fitness()
         

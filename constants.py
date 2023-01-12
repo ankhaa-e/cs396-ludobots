@@ -15,3 +15,5 @@ phaseOffset = 0
 amplitude2 = math.pi/3
 frequency2 = (math.pi*2)/50
 phaseOffset2 = math.pi/4
+
+numGenerations = 10
