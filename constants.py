@@ -3,8 +3,8 @@ import math
 gravity = [0,0,-9.8]
 
 force = 50
-timesleep = 1/10000
-timesteps = 10000
+timesleep = 1/1000
+timesteps = 500
 
 #FrontLegs
 amplitude = math.pi/5
