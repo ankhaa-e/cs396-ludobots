@@ -10,11 +10,9 @@ class HILLCLIMBER:
         self.currentGen = 0
 
     def Evolve(self):
-        self.parent.Evaluate()
         while self.currentGen < c.numGenerations:
             self.Evolve_For_One_Generation()
             self.currentGen+=1
-        self.Show_Best()
 
     def Evolve_For_One_Generation(self):
         self.Spawn()

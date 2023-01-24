@@ -11,14 +11,18 @@ z =1.5
 
 class SOLUTION:
     def __init__(self):
+        self.Create_World()
         self.weights = np.random.rand(3,2)*2 -1
         self.fitness = 0
+        self.Evaluate(True)
 
-    def Evaluate(self):
-        self.Create_World()
+    def Evaluate(self, showSim=False):
         self.Generate_Body()
         self.Generate_Brain()
-        os.system("py simulate.py DIRECT")
+        if showSim:
+            os.system("py simulate.py GUI")
+        else:
+            os.system("py simulate.py DIRECT")
         fitnessFile = open("fitness.txt","r")
         self.fitness = float(fitnessFile.read())
         fitnessFile.close()
@@ -27,6 +31,7 @@ class SOLUTION:
         pyrosim.Start_SDF("world.sdf")
         pyrosim.Send_Cube(name="Box", pos=[x-2,y+2,z-1] , size=[length,width,height])
         pyrosim.End()
+        
 
     def Generate_Body(self):
         pyrosim.Start_URDF("body.urdf")
