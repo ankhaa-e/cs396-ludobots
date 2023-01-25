@@ -4,13 +4,14 @@ from pyrosim.neuralNetwork import NEURAL_NETWORK
 
 import constants as c
 import pybullet as p
+import os
 import pyrosim.pyrosim as pyrosim
 
 class ROBOT:
-    def __init__(self):
+    def __init__(self, simulationId):
         self.motors = {}
         self.sensors = {}
-
+        self.simulationId = simulationId
         self.amplitude = c.amplitude
         self.frequency = c.frequency
         self.phaseOffset = c.phaseOffset
@@ -19,15 +20,14 @@ class ROBOT:
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
-
-        self.nn = NEURAL_NETWORK("brain.nndf")
+        self.nn = NEURAL_NETWORK("brain"+ str(simulationId)+ ".nndf")
+        os.system("del brain"+ str(simulationId)+ ".nndf")
 
     def Prepare_To_Sense(self):
         for linkName in pyrosim.linkNamesToIndices:
             self.sensors[linkName] = SENSOR(linkName)
     
     def Prepare_To_Act(self):
-     
         for jointName in pyrosim.jointNamesToIndices:
             mod = 1 if jointName == b'Torso_BackLeg' else .5
             self.motors[jointName] = MOTOR(jointName, self.robotId,
@@ -51,8 +51,10 @@ class ROBOT:
         stateOfLinkZero = p.getLinkState(self.robotId,0)
         positionOfLinkZero = stateOfLinkZero[0]
         xCoordinateOfLinkZero = positionOfLinkZero[0]
-        f = open("fitness.txt", "w")
+        f = open("tmp"+ str(self.simulationId) + ".txt", "w")
         f.write(str(xCoordinateOfLinkZero))
         f.close()
+        os.system("rename tmp"+ str(self.simulationId)+".txt fitness"+str(self.simulationId)+".txt")
+
 
     

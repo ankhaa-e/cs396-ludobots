@@ -3,8 +3,11 @@ import math
 gravity = [0,0,-9.8]
 
 force = 50
-timesleep = 1/1000
+timesleep = 1/240
 timesteps = 1000
+
+populationSize = 10
+numGenerations = 10
 
 #FrontLegs
 amplitude = math.pi/5
@@ -15,5 +18,3 @@ phaseOffset = 0
 amplitude2 = math.pi/3
 frequency2 = (math.pi*2)/50
 phaseOffset2 = math.pi/4
-
-numGenerations = 10
