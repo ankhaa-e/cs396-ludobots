@@ -44,8 +44,8 @@ class PARALLEL_HILLCLIMBER:
 
     def Mutate(self):
         for child in self.children.values():
-            i = random.randint(0,2)
-            j = random.randint(0,1)
+            i = random.randint(0,c.numSensorNeurons-1)
+            j = random.randint(0,c.numMotorNeurons-1)
             child.weights[i][j] = random.random() * 2 - 1
 
     def Print(self):
@@ -66,8 +66,10 @@ class PARALLEL_HILLCLIMBER:
             if solution.fitness < bestFitness:
                 bestFitness = solution.fitness
                 bestSolution = solution
+        print("Best Fitness: ",bestSolution.fitness, " From Brain ", bestSolution.id)
         bestSolution.Start_Simulation(True)
         bestSolution.Wait_For_Simulation_To_End()
+        bestSolution.Generate_Brain()
 
     
 

@@ -10,13 +10,13 @@ import time
 import constants as c
 
 class SIMULATION:
-    def __init__(self, directOrGUI, simulationId=""):
+    def __init__(self, directOrGUI, simulationId="",rem=True):
         self.physicsClient = p.connect(p.GUI) if directOrGUI == "GUI" else p.connect(p.DIRECT)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(*c.gravity)
         self.direct = directOrGUI != "GUI"
         self.world = WORLD()
-        self.robot = ROBOT(simulationId)
+        self.robot = ROBOT(simulationId,rem)
 
     def __del__(self):
         p.disconnect()

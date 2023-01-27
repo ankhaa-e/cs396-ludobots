@@ -7,7 +7,12 @@ timesleep = 1/240
 timesteps = 1000
 
 populationSize = 10
-numGenerations = 10
+numGenerations = 40
+
+numSensorNeurons = 4
+numMotorNeurons = 8
+
+motorJointRange = .4
 
 #FrontLegs
 amplitude = math.pi/5

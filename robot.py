@@ -8,7 +8,7 @@ import os
 import pyrosim.pyrosim as pyrosim
 
 class ROBOT:
-    def __init__(self, simulationId):
+    def __init__(self, simulationId, rem=True):
         self.motors = {}
         self.sensors = {}
         self.simulationId = simulationId
@@ -21,7 +21,8 @@ class ROBOT:
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
         self.nn = NEURAL_NETWORK("brain"+ str(simulationId)+ ".nndf")
-        os.system("del brain"+ str(simulationId)+ ".nndf")
+        if rem:
+            os.system("del brain"+ str(simulationId)+ ".nndf")
 
     def Prepare_To_Sense(self):
         for linkName in pyrosim.linkNamesToIndices:
@@ -44,7 +45,7 @@ class ROBOT:
         for neuronName in self.nn.Get_Neuron_Names():
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
-                desiredAngle = self.nn.Get_Value_Of(neuronName)
+                desiredAngle = self.nn.Get_Value_Of(neuronName) * c.motorJointRange
                 self.motors[jointName.encode('ascii')].Set_Value(desiredAngle)
 
     def Get_Fitness(self):
