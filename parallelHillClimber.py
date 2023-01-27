@@ -49,7 +49,7 @@ class PARALLEL_HILLCLIMBER:
             child.weights[i][j] = random.random() * 2 - 1
 
     def Print(self):
-        print("\nGeneration ", self.currentGen)
+        print("\n\nGeneration ", self.currentGen)
         for (i, parent), (j,child) in zip(self.parents.items(),self.children.items()):
             print("Parent ",i," Fitness: ",parent.fitness, " Child " ,j, " Fitness: ", child.fitness)
         print("")
@@ -68,6 +68,7 @@ class PARALLEL_HILLCLIMBER:
                 bestSolution = solution
         bestSolution.Start_Simulation(True)
         bestSolution.Wait_For_Simulation_To_End()
+        print("\n\nBest fitness is : ", bestFitness, " from solution ", bestSolution.id,"\n\n")
 
     
 
