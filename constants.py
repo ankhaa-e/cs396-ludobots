@@ -7,7 +7,7 @@ timesleep = 1/240
 timesteps = 1000
 
 populationSize = 10
-numGenerations = 40
+numGenerations = 10
 
 numSensorNeurons = 4
 numMotorNeurons = 8

@@ -3,12 +3,14 @@ import constants as c
 import copy
 import random
 import os
+import time
 
 import constants as c
 class PARALLEL_HILLCLIMBER:
     def __init__(self):
         os.system("del brain*.nndf")
         os.system("del fitness*.txt")
+        os.system("del tmp*.txt")
         self.nextAvailableId = 0
         self.parents = {} # SOLUTION()
         self.children = {}
@@ -18,6 +20,8 @@ class PARALLEL_HILLCLIMBER:
         self.currentGen = 0
 
     def Evolve(self):
+        time.sleep(5)
+        exit()
         self.Evaluate(self.parents)
         while self.currentGen < c.numGenerations:
             self.Evolve_For_One_Generation()
@@ -49,10 +53,10 @@ class PARALLEL_HILLCLIMBER:
             child.weights[i][j] = random.random() * 2 - 1
 
     def Print(self):
-        print("\nGeneration ", self.currentGen)
+        print("\n\nGeneration ", self.currentGen)
         for (i, parent), (j,child) in zip(self.parents.items(),self.children.items()):
             print("Parent ",i," Fitness: ",parent.fitness, " Child " ,j, " Fitness: ", child.fitness)
-        print("")
+        print("\n")
     
     def Select(self):
         for (i, parent), (j,child) in zip(self.parents.items(),self.children.items()):
@@ -66,7 +70,7 @@ class PARALLEL_HILLCLIMBER:
             if solution.fitness < bestFitness:
                 bestFitness = solution.fitness
                 bestSolution = solution
-        print("Best Fitness: ",bestSolution.fitness, " From Brain ", bestSolution.id)
+        print("Best Fitness: ",bestSolution.fitness, " From Brain ", bestSolution.id,"\n\n")
         bestSolution.Start_Simulation(True)
         bestSolution.Wait_For_Simulation_To_End()
         bestSolution.Generate_Brain()

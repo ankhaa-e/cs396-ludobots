@@ -47,7 +47,7 @@ class SOLUTION:
         pyrosim.End()
         
 
-    def Generate_Body(self):
+    def Generate_Bodyold(self):
         pyrosim.Start_URDF("body.urdf")
         pyrosim.Send_Cube(name="Torso", pos=[x,y,z] , size=[length,width,height])
         
@@ -94,4 +94,12 @@ class SOLUTION:
         for i in range(c.numSensorNeurons):
             for j in range(c.numMotorNeurons):
                 pyrosim.Send_Synapse( sourceNeuronName = i , targetNeuronName = j+c.numSensorNeurons , weight = self.weights[i][j] )
+        pyrosim.End()
+
+    def Generate_Body(self):
+        pyrosim.Start_URDF("body.urdf")
+        #length, width , height
+        pyrosim.Send_Cube(name="Torso", pos=[x,y,z] , size=[.75,.5,.4])
+        pyrosim.Send_Joint( name = "Torso_Abdomen" , parent= "Torso" , child = "Abdomen" , type = "revolute", position = [0,0,.75],jointAxis="1 0 0")
+        pyrosim.Send_Cube(name="Abdomen", pos=[0,.25,0] , size=[.5,.6,.5])
         pyrosim.End()
