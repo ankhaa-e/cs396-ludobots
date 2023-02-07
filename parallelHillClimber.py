@@ -20,8 +20,6 @@ class PARALLEL_HILLCLIMBER:
         self.currentGen = 0
 
     def Evolve(self):
-        time.sleep(5)
-        exit()
         self.Evaluate(self.parents)
         while self.currentGen < c.numGenerations:
             self.Evolve_For_One_Generation()
