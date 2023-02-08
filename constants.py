@@ -3,16 +3,16 @@ import math
 gravity = [0,0,-9.8]
 
 force = 50
-timesleep = 1/240
-timesteps = 2400
+timesleep = 1/100000
+timesteps = 1000
 
 populationSize = 10
-numGenerations = 100
+numGenerations = 10
 
-numSensorNeurons = 6
-numMotorNeurons = 14
+numSensorNeurons = 4
+numMotorNeurons = 10
 
-motorJointRange = .4
+motorJointRange = .5
 
 #FrontLegs
 amplitude = math.pi/5
