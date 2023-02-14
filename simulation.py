@@ -12,6 +12,7 @@ import constants as c
 class SIMULATION:
     def __init__(self, directOrGUI, simulationId="",rem=True):
         self.physicsClient = p.connect(p.GUI) if directOrGUI == "GUI" else p.connect(p.DIRECT)
+        if directOrGUI: p.configureDebugVisualizer(p.COV_ENABLE_GUI,0)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(*c.gravity)
         self.direct = directOrGUI != "GUI"
