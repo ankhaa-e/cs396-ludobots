@@ -4,7 +4,7 @@ gravity = [0,0,-9.8]
 
 force = 75
 timesleep = 1/100000
-timesteps = 200
+timesteps = 2000
 
 populationSize = 10
 numGenerations = 10
@@ -12,7 +12,7 @@ numGenerations = 10
 numSensorNeurons = 4
 numMotorNeurons = 10
 
-motorJointRange = .35
+motorJointRange = .25
 
 #FrontLegs
 amplitude = math.pi/5

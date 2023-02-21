@@ -2,7 +2,7 @@ import pyrosim.pyrosim as pyrosim
 import constants as c
 import random
 import math
-
+from generator import Generator
 length = 1
 width = 1
 height = 1
@@ -75,7 +75,73 @@ def IsSensor(currSegment, sensors):
         sensors.append(currSegment)
         return "0 1.0 0.5 1.0", sensors
     return "0 1.0 1.0 1.0", sensors
+def Generate_Creature(joints,sensors):
+    
+    length, width, height = Randomize_Dimensions()
 
+    x = 0
+    y = 0
+    z = 1
+
+    pyrosim.Start_URDF("body.urdf")
+    color, sensors = IsSensor("1",sensors)
+    pyrosim.Send_Cube(name="1", pos=[x,y,z] , size=[length,width,height],color=color)
+
+    parentLength = length
+
+
+    length, width, height = Randomize_Dimensions()    
+    color, sensors = IsSensor("2",sensors)
+    pyrosim.Send_Joint( name = "1_2" , parent= "1" , child = "2",
+                        type = "revolute", position = [-1*parentLength/2,y,z], jointAxis="0 1 0")
+    pyrosim.Send_Cube(name="2", pos=[-1*.5*length,0,0], size=[length,width,height],color=color)
+    leftMostSegment = "2"
+    leftMostLength = length
+    
+    length, width, height = Randomize_Dimensions()
+    color, sensors = IsSensor("3",sensors)
+    pyrosim.Send_Joint( name = "1_3" , parent= "1" , child = "3",
+                        type = "revolute", position = [parentLength/2,y,z],jointAxis="0 1 0")
+    pyrosim.Send_Cube(name="3", pos=[.5*length,0,0], size=[length,width,height],color=color)
+
+    rightMostSegment = "3"
+    rightMostLength = length
+    
+    numBodyParts = 3
+    newSegment = True
+    joints += ["1_2","1_3"]
+
+    while(newSegment):
+        
+        length, width, height = Randomize_Dimensions()  
+
+        numBodyParts += 1
+        currSegment = str(numBodyParts)
+        addToLeft = random.random() >= .5
+        sideMultiplier = -1 if addToLeft else 1
+        parentSegment = leftMostSegment if addToLeft else rightMostSegment 
+        parentLength = leftMostLength if addToLeft else rightMostLength
+        rotX = 0 if random.random() <= .75 else random.randint(15,45)
+        rotY = 0 #if random.random() <= .75 else random.randint(15,45)
+        rotZ = 0 if random.random() <= .75 else random.randint(15,45)
+        rotation = str(rotX) + " " + str(rotY) + " " + str(rotZ)
+
+        pyrosim.Send_Joint( name = parentSegment + "_" + currSegment , parent= parentSegment , child = currSegment,
+                            type = "revolute", position = [sideMultiplier*parentLength,0,0],jointAxis="0 1 0", rotation=rotation)
+        joints.append(parentSegment + "_" + currSegment)
+        color,sensors = IsSensor(currSegment,sensors)      
+        pyrosim.Send_Cube(name=currSegment, pos=[sideMultiplier*length*.5,0,0], size=[length,width,height], color=color)
+        if addToLeft:
+            leftMostLength = length
+            leftMostSegment = currSegment
+        else:
+            rightMostLength = length
+            rightMostSegment = currSegment
+
+        if numBodyParts == c.sizeLimit: break
+        newSegment = random.random() >= .25
+    pyrosim.End()
+    return sensors, joints
 def Generate_Snake(joints,sensors):
     
     length, width, height = Randomize_Dimensions()
@@ -122,8 +188,13 @@ def Generate_Snake(joints,sensors):
         sideMultiplier = -1 if addToLeft else 1
         parentSegment = leftMostSegment if addToLeft else rightMostSegment 
         parentLength = leftMostLength if addToLeft else rightMostLength
+        rotX = 0 if random.random() <= .75 else random.randint(15,45)
+        rotY = 0 #if random.random() <= .75 else random.randint(15,45)
+        rotZ = 0 if random.random() <= .75 else random.randint(15,45)
+        rotation = str(rotX) + " " + str(rotY) + " " + str(rotZ)
+
         pyrosim.Send_Joint( name = parentSegment + "_" + currSegment , parent= parentSegment , child = currSegment,
-                            type = "revolute", position = [sideMultiplier*parentLength,0,0],jointAxis="0 1 0")
+                            type = "revolute", position = [sideMultiplier*parentLength,0,0],jointAxis="0 1 0", rotation=rotation)
         joints.append(parentSegment + "_" + currSegment)
         color,sensors = IsSensor(currSegment,sensors)      
         pyrosim.Send_Cube(name=currSegment, pos=[sideMultiplier*length*.5,0,0], size=[length,width,height], color=color)
@@ -185,6 +256,6 @@ def Generate_Brain():
 
     pyrosim.End()
 
-
+g= Generator()
 #Create_World()
-Create_Robot()
+g.Create_Robot()
