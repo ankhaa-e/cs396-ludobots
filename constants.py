@@ -4,10 +4,10 @@ gravity = [0,0,-9.8]
 
 force = 75
 timesleep = 1/100000
-timesteps = 2000
+timesteps = 1000
 
 populationSize = 10
-numGenerations = 10
+numGenerations = 100
 
 numSensorNeurons = 4
 numMotorNeurons = 10

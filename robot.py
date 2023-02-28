@@ -16,12 +16,13 @@ class ROBOT:
         self.frequency = c.frequency
         self.phaseOffset = c.phaseOffset
 
-        self.robotId = p.loadURDF("body.urdf")
+        self.robotId = p.loadURDF("body"+str(simulationId)+".urdf")
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
         self.nn = NEURAL_NETWORK("brain"+ str(simulationId)+ ".nndf")
         if rem:
+            os.system("del body"+ str(simulationId)+ ".urdf")
             os.system("del brain"+ str(simulationId)+ ".nndf")
 
     def Prepare_To_Sense(self):

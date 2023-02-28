@@ -3,14 +3,18 @@ import constants as c
 import copy
 import random
 import os
+import numpy as np
 import time
 
 import constants as c
 class PARALLEL_HILLCLIMBER:
     def __init__(self):
+        random.seed(207)
+        os.system("del body*.urdf")
         os.system("del brain*.nndf")
         os.system("del fitness*.txt")
         os.system("del tmp*.txt")
+
         self.nextAvailableId = 0
         self.parents = {} # SOLUTION()
         self.children = {}
@@ -18,6 +22,7 @@ class PARALLEL_HILLCLIMBER:
             self.parents.update({i:SOLUTION(i)})
             self.nextAvailableId += 1
         self.currentGen = 0
+        self.bestFitness = []
 
     def Evolve(self):
         self.Evaluate(self.parents)
@@ -46,15 +51,20 @@ class PARALLEL_HILLCLIMBER:
 
     def Mutate(self):
         for child in self.children.values():
-            i = random.randint(0,c.numSensorNeurons-1)
-            j = random.randint(0,c.numMotorNeurons-1)
-            child.weights[i][j] = random.random() * 2 - 1
+            child.Mutate()
+            #i = random.randint(0,c.numSensorNeurons-1)
+            #j = random.randint(0,c.numMotorNeurons-1)
+            #child.weights[i][j] = random.random() * 2 - 1
 
     def Print(self):
+        bestFitness = 100
         print("\n\nGeneration ", self.currentGen)
         for (i, parent), (j,child) in zip(self.parents.items(),self.children.items()):
             print("Parent ",i," Fitness: ",parent.fitness, " Child " ,j, " Fitness: ", child.fitness)
+            bestFitness = min(bestFitness,min(parent.fitness,child.fitness))
         print("\n")
+        self.bestFitness.append(abs(bestFitness))
+
     
     def Select(self):
         for (i, parent), (j,child) in zip(self.parents.items(),self.children.items()):
@@ -69,9 +79,12 @@ class PARALLEL_HILLCLIMBER:
                 bestFitness = solution.fitness
                 bestSolution = solution
         print("Best Fitness: ",bestSolution.fitness, " From Brain ", bestSolution.id,"\n\n")
+        bestSolution.Generate_Brain()
+        bestSolution.Write_Body()
         bestSolution.Start_Simulation(True)
         bestSolution.Wait_For_Simulation_To_End()
         bestSolution.Generate_Brain()
-
+        bestSolution.Write_Body()
+        np.save("data/fitness1.npy", self.bestFitness)
     
 
