@@ -28,8 +28,6 @@ class SOLUTION:
         self.base = None
         self.Generate_Body()
         self.Write_Body()
-        #if self.id == 0:
-        #    self.Create_World()
 
         self.fitness = 0
         
@@ -37,10 +35,9 @@ class SOLUTION:
         self.Generate_Brain()
 
     def Mutate(self,r=random.random()):
-        #r = random.random()
 
         if r <= .25:
-            #print("Adding new Segment")
+            #Add Body part
             addToLeft = random.random() >= .5
             parentSegment = self.leftMostSegment if addToLeft else self.rightMostSegment
             length, width, height = self.Randomize_Dimensions(1,.75,.4)
@@ -59,9 +56,6 @@ class SOLUTION:
 
             
             self.weights = np.append(self.weights,np.random.rand(len(self.sensors),len(newJoints))*2 -1,axis=1)
-
-            #sensors = np.append(sensors,np.random.rand(len(newJoints))*2 -1,axis=0)
-            # add body part
             self.weights = np.vstack([self.weights,np.random.rand(len(newSensors),len(self.joints)+len(newJoints))*2 -1])
             if addToLeft:
                 self.leftMostSegment = newPart
@@ -69,14 +63,11 @@ class SOLUTION:
                 self.rightMostSegment = newPart
 
         elif r <= .5:
-            #print("Removing Segment")
+            #Remove Body Part
             removeFromLeft = random.random() >= .5    
             
             currSegment = self.base
             lastSegment = self.base
-
-            removedSensors= []
-            removedJoints =[]
 
             if removeFromLeft:  
                 while len(currSegment.leftChildren) > 0:
@@ -106,16 +97,14 @@ class SOLUTION:
                 newSensors, newJoints = currSegment.Get_NewParts()
                 self.weights = np.append(self.weights,np.random.rand(len(self.sensors),len(newJoints))*2 -1,axis=1)
                 self.weights = np.vstack([self.weights,np.random.rand(len(newSensors),len(self.joints)+len(newJoints))*2 -1])
-                #print("adding limbs")
             else:    
-                #print("removing limbs") 
                 currSegment.limbs = {}
 
             # add/remove limbs
 
         self.Write_Body()
 
-        #print(i,j)
+
         while len(self.joints) < len(self.weights[0]):
             self.weights = np.delete(self.weights,-1,1)
         while len(self.sensors) < len(self.weights):
@@ -135,7 +124,7 @@ class SOLUTION:
     def Start_Simulation(self,showSim=False):
 
         if showSim:
-            os.system("START /B py simulate.py GUI " + str(self.id))
+            os.system("py simulate.py GUI " + str(self.id))
         else:
             os.system("START /B py simulate.py DIRECT " + str(self.id))
 
@@ -152,18 +141,10 @@ class SOLUTION:
 
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
-        #pyrosim.Send_Cube(name="Box", pos=[x-2,y+2,z-1] , size=[length,width,height])
         pyrosim.End()
         
 
-    def Generate_Bodyold(self):
-        pyrosim.Start_URDF("body.urdf")
-        pyrosim.End()
-
-
-
     def Generate_Brain(self):
-        #print(self.weights)
         pyrosim.Start_NeuralNetwork("brain"+ str(self.id) +".nndf")
         n = 0
         for sensor in self.sensors:
@@ -190,20 +171,6 @@ class SOLUTION:
         return "0 1.0 1.0 1.0"
     
     def Write_Body(self):
-        """pyrosim.Start_URDF("body"+ str(self.id) +".urdf")
-        self.sensors, self.joints = self.base.Write_Body()
-        while len(self.sensors) == 0:
-            self.sensors = []
-            self.joints = []
-            
-            self.Generate_Body()
-            self.sensors, self.joints = self.base.Write_Body()
-        #print("sensors: ", self.sensors)
-        #print("joints: ", self.joints)
-        pyrosim.End()
-        print("made body ", self.id)"""
-
-
 
         pyrosim.Start_URDF("body"+ str(self.id) +".urdf")
         self.sensors, self.joints = self.base.Write_Body()

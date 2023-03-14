@@ -9,18 +9,20 @@ import time
 import pyrosim.pyrosim as pyrosim
 
 class ROBOT:
-    def __init__(self, simulationId, rem=True):
+    def __init__(self, simulationId, rem=True,best=False):
         self.motors = {}
         self.sensors = {}
         self.simulationId = simulationId
         self.amplitude = c.amplitude
         self.frequency = c.frequency
         self.phaseOffset = c.phaseOffset
-        self.robotId = p.loadURDF("body"+str(simulationId)+".urdf")
+        bodyString = "body" if not best else "best"
+        self.robotId = p.loadURDF(bodyString+str(simulationId)+".urdf")
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
-        self.nn = NEURAL_NETWORK("brain"+ str(simulationId)+ ".nndf")
+        brainString = "brain" if not best else "best"
+        self.nn = NEURAL_NETWORK(brainString + str(simulationId)+ ".nndf")
         if rem:
             os.system("del body"+ str(simulationId)+ ".urdf")
             os.system("del brain"+ str(simulationId)+ ".nndf")

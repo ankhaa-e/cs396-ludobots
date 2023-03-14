@@ -9,7 +9,7 @@ import time
 import constants as c
 class PARALLEL_HILLCLIMBER:
     def __init__(self):
-        random.seed(234542362356)
+       
         os.system("del body*.urdf")
         os.system("del brain*.nndf")
         os.system("del fitness*.txt")
@@ -51,15 +51,12 @@ class PARALLEL_HILLCLIMBER:
 
     def Mutate(self):
         for child in self.children.values():
-            if len(child.joints) < 6:
+            if len(child.joints) < 4:
                 child.Mutate(.1)
             elif len(child.joints) > 12:
                 child.Mutate(.4)
             else:
                 child.Mutate()
-            #i = random.randint(0,c.numSensorNeurons-1)
-            #j = random.randint(0,c.numMotorNeurons-1)
-            #child.weights[i][j] = random.random() * 2 - 1
 
     def Print(self):
         bestFitness = 100
@@ -90,6 +87,6 @@ class PARALLEL_HILLCLIMBER:
         bestSolution.Wait_For_Simulation_To_End()
         bestSolution.Generate_Brain()
         bestSolution.Write_Body()
-        np.save("data/fitness2.npy", self.bestFitness)
+        np.save("data/fitness10.npy", self.bestFitness)
     
 
