@@ -28,8 +28,8 @@ class SOLUTION:
         self.base = None
         self.Generate_Body()
         self.Write_Body()
-        if self.id == 0:
-            self.Create_World()
+        #if self.id == 0:
+        #    self.Create_World()
 
         self.fitness = 0
         
@@ -190,16 +190,31 @@ class SOLUTION:
         return "0 1.0 1.0 1.0"
     
     def Write_Body(self):
-        pyrosim.Start_URDF("body"+ str(self.id) +".urdf")
+        """pyrosim.Start_URDF("body"+ str(self.id) +".urdf")
         self.sensors, self.joints = self.base.Write_Body()
         while len(self.sensors) == 0:
             self.sensors = []
             self.joints = []
+            
             self.Generate_Body()
             self.sensors, self.joints = self.base.Write_Body()
         #print("sensors: ", self.sensors)
         #print("joints: ", self.joints)
         pyrosim.End()
+        print("made body ", self.id)"""
+
+
+
+        pyrosim.Start_URDF("body"+ str(self.id) +".urdf")
+        self.sensors, self.joints = self.base.Write_Body()
+        pyrosim.End()
+        while len(self.sensors) == 0:
+            self.sensors = []
+            self.joints = []
+            self.Generate_Body()
+            pyrosim.Start_URDF("body"+ str(self.id) +".urdf")
+            self.sensors, self.joints = self.base.Write_Body()
+            pyrosim.End()
 
     def Generate_Body(self):
         length, width, height = self.Randomize_Dimensions()

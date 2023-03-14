@@ -50,8 +50,8 @@ class BodyPart:
     def Generate_Limb(self,length,width,height, numBodyParts):
                
             depth = True if random.random() >= .5 else False
-            
             for yMult in [1,-1]:
+                
                 numBodyParts += 1
                 self.numChildren+=1
                 currSegment = str(numBodyParts)

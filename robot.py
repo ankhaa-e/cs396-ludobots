@@ -5,6 +5,7 @@ from pyrosim.neuralNetwork import NEURAL_NETWORK
 import constants as c
 import pybullet as p
 import os
+import time
 import pyrosim.pyrosim as pyrosim
 
 class ROBOT:
@@ -15,7 +16,6 @@ class ROBOT:
         self.amplitude = c.amplitude
         self.frequency = c.frequency
         self.phaseOffset = c.phaseOffset
-
         self.robotId = p.loadURDF("body"+str(simulationId)+".urdf")
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.Prepare_To_Sense()
@@ -56,6 +56,7 @@ class ROBOT:
         f = open("tmp"+ str(self.simulationId) + ".txt", "w")
         f.write(str(xCoordinateOfLinkZero))
         f.close()
+        time.sleep(0.01)
         os.system("rename tmp"+ str(self.simulationId)+".txt fitness"+str(self.simulationId)+".txt")
 
 
